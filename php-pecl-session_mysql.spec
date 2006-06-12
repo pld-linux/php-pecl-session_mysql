@@ -5,12 +5,13 @@
 Summary:	MySQL session save handler for PHP
 Name:		php-pecl-%{_modname}
 Version:	1.8
-Release:	0.3
+Release:	0.4
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{_modname}-%{version}.tgz
 # Source0-md5:	d3507e1a9d0a82412cc2b5c673aa8ca1
 Source1:	%{name}.ini
+Source2:	%{name}.sql
 Patch0:		%{name}-zts.patch
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
 BuildRequires:	mysql-devel
@@ -30,6 +31,7 @@ MySQL session save handler for PHP.
 %prep
 %setup -q -n %{_modname}-%{version}
 %patch0 -p1
+cp -a %{SOURCE2} database.sql
 
 %build
 phpize
@@ -59,6 +61,6 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc LICENCE README
+%doc LICENCE README database.sql
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/conf.d/%{_modname}.ini
 %attr(755,root,root) %{extensionsdir}/%{_modname}.so
