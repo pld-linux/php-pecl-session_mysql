@@ -3,6 +3,7 @@
 %define		_sysconfdir	/etc/php
 %define		extensionsdir	%(php-config --extension-dir 2>/dev/null)
 Summary:	MySQL session save handler for PHP
+Summary(pl):	Obs³uga zapisywania sesji w bazie MySQL dla PHP
 Name:		php-pecl-%{_modname}
 Version:	1.8
 Release:	0.4
@@ -25,8 +26,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 MySQL session save handler for PHP.
 - supports locking
-- very quiet (doesnt log any error) (but upper session functions can
+- very quiet (doesn't log any error) (but upper session functions can
   print some error).
+
+%description -l pl
+Obs³uga zapisywania sesji w bazie MySQL dla PHP.
+- obs³uguje blokowanie
+- bardzo cicha (sama nie loguje ¿adnych b³êdów; ale funkcje wy¿szego
+  poziomu mog± wypisywaæ b³êdy).
 
 %prep
 %setup -q -n %{_modname}-%{version}
