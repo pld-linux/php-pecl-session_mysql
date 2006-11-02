@@ -17,7 +17,7 @@ Patch0:		%{name}-zts.patch
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
 BuildRequires:	mysql-devel
 BuildRequires:	php-devel >= 3:5.0.0
-BuildRequires:	rpmbuild(macros) >= 1.254
+BuildRequires:	rpmbuild(macros) >= 1.322
 %{?requires_php_extension}
 Requires:	%{_sysconfdir}/conf.d
 Requires:	php-mysql
