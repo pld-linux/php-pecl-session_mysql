@@ -1,12 +1,14 @@
 /*
 
-create database phpsession;
--- note it probably needs less privileges:
-grant all privileges on phpsession.* to phpsession identified by "phpsession";
-use phpsession;
+CREATE DATABASE phpsession;
+
+GRANT SELECT,UPDATE,INSERT,DELETE
+    ON phpsession.* TO 'phpsession'@'localhost' IDENTIFIED BY 'phpsession';
+
+USE PHPSESSION;
 */
 
-create table phpsession (
+CREATE TABLE phpsession (
 	sess_key char(64) not null,
 	sess_mtime int(10) unsigned not null,
 	sess_host char(64) not null,
