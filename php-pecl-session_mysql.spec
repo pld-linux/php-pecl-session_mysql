@@ -1,3 +1,7 @@
+# on apache2 restart when module can't connect to database issues errors that can't be understand why:
+# [error] [client ::1] PHP Fatal error:  session_start(): Failed to initialize storage module: mysql (path: /var/run/php) in class.auth.php on line 22
+# [error] [client x.x.x.x] PHP Fatal error:  session_start(): Failed to initialize storage module: mysql (path: /var/run/php) in class.auth.php on line 22
+#
 %define		_modname	session_mysql
 Summary:	MySQL session save handler for PHP
 Summary(pl):	Obs³uga zapisywania sesji w bazie MySQL dla PHP
@@ -17,7 +21,7 @@ BuildRequires:	php-devel >= 3:5.0.0
 BuildRequires:	rpmbuild(macros) >= 1.344
 %{?requires_php_extension}
 Requires:	php-common >= 4:5.0.4
-Requires:	php(mysql)
+Provides:	php(session_mysql)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
