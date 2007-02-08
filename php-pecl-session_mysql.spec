@@ -2,16 +2,15 @@
 Summary:	MySQL session save handler for PHP
 Summary(pl):	Obs³uga zapisywania sesji w bazie MySQL dla PHP
 Name:		php-pecl-%{_modname}
-Version:	1.8
+Version:	1.9
 Release:	1
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{_modname}-%{version}.tgz
-# Source0-md5:	d3507e1a9d0a82412cc2b5c673aa8ca1
+# Source0-md5:	0eea3ce6c97ac5a2fdce71f23ce1ff2b
 Source1:	%{name}.ini
 Source2:	%{name}.sql
-Patch0:		%{name}-zts.patch
-Patch1:		%{name}-leak.patch
+Patch0:		%{name}-leak.patch
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
 BuildRequires:	mysql-devel
 BuildRequires:	php-devel >= 3:5.0.0
@@ -36,7 +35,6 @@ Obs³uga zapisywania sesji w bazie MySQL dla PHP.
 %prep
 %setup -q -n %{_modname}-%{version}
 %patch0 -p1
-%patch1 -p1
 cp -a %{SOURCE2} database.sql
 
 %build
