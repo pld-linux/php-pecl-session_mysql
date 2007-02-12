@@ -4,7 +4,7 @@
 #
 %define		_modname	session_mysql
 Summary:	MySQL session save handler for PHP
-Summary(pl):	Obs³uga zapisywania sesji w bazie MySQL dla PHP
+Summary(pl.UTF-8):   ObsÅ‚uga zapisywania sesji w bazie MySQL dla PHP
 Name:		php-pecl-%{_modname}
 Version:	1.9
 Release:	1
@@ -30,11 +30,11 @@ MySQL session save handler for PHP.
 - very quiet (doesn't log any error) (but upper session functions can
   print some error).
 
-%description -l pl
-Obs³uga zapisywania sesji w bazie MySQL dla PHP.
-- obs³uguje blokowanie
-- bardzo cicha (sama nie loguje ¿adnych b³êdów; ale funkcje wy¿szego
-  poziomu mog± wypisywaæ b³êdy).
+%description -l pl.UTF-8
+ObsÅ‚uga zapisywania sesji w bazie MySQL dla PHP.
+- obsÅ‚uguje blokowanie
+- bardzo cicha (sama nie loguje Å¼adnych bÅ‚Ä™dÃ³w; ale funkcje wyÅ¼szego
+  poziomu mogÄ… wypisywaÄ‡ bÅ‚Ä™dy).
 
 %prep
 %setup -q -n %{_modname}-%{version}
