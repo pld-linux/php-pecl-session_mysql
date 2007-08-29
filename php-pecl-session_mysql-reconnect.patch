@@ -1,31 +1,3 @@
-Only in session_mysql-1.9-reconnect/: .deps
-Only in session_mysql-1.9-reconnect/: .libs
-Only in session_mysql-1.9-reconnect/: Makefile
-Only in session_mysql-1.9-reconnect/: Makefile.fragments
-Only in session_mysql-1.9-reconnect/: Makefile.global
-Only in session_mysql-1.9-reconnect/: Makefile.objects
-Only in session_mysql-1.9-reconnect/: acinclude.m4
-Only in session_mysql-1.9-reconnect/: aclocal.m4
-Only in session_mysql-1.9-reconnect/: autom4te.cache
-Only in session_mysql-1.9-reconnect/: build
-Only in session_mysql-1.9-reconnect/: config.guess
-Only in session_mysql-1.9-reconnect/: config.h
-Only in session_mysql-1.9-reconnect/: config.h.in
-Only in session_mysql-1.9-reconnect/: config.log
-Only in session_mysql-1.9-reconnect/: config.nice
-Only in session_mysql-1.9-reconnect/: config.status
-Only in session_mysql-1.9-reconnect/: config.sub
-Only in session_mysql-1.9-reconnect/: configure
-Only in session_mysql-1.9-reconnect/: configure.in
-Only in session_mysql-1.9-reconnect/: include
-Only in session_mysql-1.9-reconnect/: install-sh
-Only in session_mysql-1.9-reconnect/: libtool
-Only in session_mysql-1.9-reconnect/: ltmain.sh
-Only in session_mysql-1.9-reconnect/: missing
-Only in session_mysql-1.9-reconnect/: mkinstalldirs
-Only in session_mysql-1.9-reconnect/: modules
-Only in session_mysql-1.9-reconnect/: run-tests.php
-diff -ur session_mysql-1.9/session_mysql.c session_mysql-1.9-reconnect/session_mysql.c
 --- session_mysql-1.9/session_mysql.c	2007-08-29 19:35:20.209370945 +0300
 +++ session_mysql-1.9-reconnect/session_mysql.c	2007-08-29 19:35:53.222688544 +0300
 @@ -8,6 +8,15 @@
@@ -156,6 +128,3 @@ diff -ur session_mysql-1.9/session_mysql.c session_mysql-1.9-reconnect/session_m
  }
  /* }}} */
  #endif
-Only in session_mysql-1.9-reconnect/: session_mysql.c~
-Only in session_mysql-1.9-reconnect/: session_mysql.la
-Only in session_mysql-1.9-reconnect/: session_mysql.lo
