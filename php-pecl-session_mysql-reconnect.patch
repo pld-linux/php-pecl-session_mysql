@@ -1,0 +1,161 @@
+Only in session_mysql-1.9-reconnect/: .deps
+Only in session_mysql-1.9-reconnect/: .libs
+Only in session_mysql-1.9-reconnect/: Makefile
+Only in session_mysql-1.9-reconnect/: Makefile.fragments
+Only in session_mysql-1.9-reconnect/: Makefile.global
+Only in session_mysql-1.9-reconnect/: Makefile.objects
+Only in session_mysql-1.9-reconnect/: acinclude.m4
+Only in session_mysql-1.9-reconnect/: aclocal.m4
+Only in session_mysql-1.9-reconnect/: autom4te.cache
+Only in session_mysql-1.9-reconnect/: build
+Only in session_mysql-1.9-reconnect/: config.guess
+Only in session_mysql-1.9-reconnect/: config.h
+Only in session_mysql-1.9-reconnect/: config.h.in
+Only in session_mysql-1.9-reconnect/: config.log
+Only in session_mysql-1.9-reconnect/: config.nice
+Only in session_mysql-1.9-reconnect/: config.status
+Only in session_mysql-1.9-reconnect/: config.sub
+Only in session_mysql-1.9-reconnect/: configure
+Only in session_mysql-1.9-reconnect/: configure.in
+Only in session_mysql-1.9-reconnect/: include
+Only in session_mysql-1.9-reconnect/: install-sh
+Only in session_mysql-1.9-reconnect/: libtool
+Only in session_mysql-1.9-reconnect/: ltmain.sh
+Only in session_mysql-1.9-reconnect/: missing
+Only in session_mysql-1.9-reconnect/: mkinstalldirs
+Only in session_mysql-1.9-reconnect/: modules
+Only in session_mysql-1.9-reconnect/: run-tests.php
+diff -ur session_mysql-1.9/session_mysql.c session_mysql-1.9-reconnect/session_mysql.c
+--- session_mysql-1.9/session_mysql.c	2007-08-29 19:35:20.209370945 +0300
++++ session_mysql-1.9-reconnect/session_mysql.c	2007-08-29 19:35:53.222688544 +0300
+@@ -8,6 +8,15 @@
+ 
+ #include "ext/session/php_session.h"
+ 
++//#define DEBUG
++#undef DEBUG
++
++#ifdef DEBUG
++#define	_D(args...) { fprintf(stderr, "%s:%d %s(): ", strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__, __LINE__, __FUNCTION__); fprintf(stderr, args); fprintf(stderr, "\n"); fflush(stderr); }
++#else
++#define _D(args...)
++#endif
++
+ ZEND_DECLARE_MODULE_GLOBALS(session_mysql)
+ 
+ /* {{{ zend_session_mysql_init_globals
+@@ -300,21 +309,25 @@
+ }
+ 
+ static int session_mysql_connect(TSRMLS_D) {
+-#if	MYSQL_VERSION_ID >= 50013
+-	my_bool opt=1;
+-#endif
++	// here we don't check for persistent, as if persistent is disabled the
++	// mysql handle is closed at the end of request.
++	if (!SESSION_MYSQL_G(mysql)) {
++		int ret;
++		MYSQL *h;
+ 
+-	if (!SESSION_MYSQL_G(mysql) || !SESSION_MYSQL_G(persistent)) {
+-		if (!SESSION_MYSQL_G(mysql)) {
+-			if (!(SESSION_MYSQL_G(mysql)=mysql_init(SESSION_MYSQL_G(mysql)))) {
+-				return FAILURE;
+-			}
++		if (!(h = mysql_init(SESSION_MYSQL_G(mysql)))) {
++			return FAILURE;
+ 		}
++		SESSION_MYSQL_G(mysql) = h;
+ 
++_D("mysql version: %d", MYSQL_VERSION_ID);
+ #if	MYSQL_VERSION_ID >= 50013
+-		mysql_options(SESSION_MYSQL_G(mysql), MYSQL_OPT_RECONNECT, &opt);
++		// in mysql versions above 5.0.3 the reconnect flag is off by default,
++		// since 5.0.13 it's possible to set reconnect flag
++		my_bool reconnect = 1;
++		mysql_options(SESSION_MYSQL_G(mysql), MYSQL_OPT_RECONNECT, &reconnect);
+ #endif
+-		if (mysql_real_connect(
++		h = mysql_real_connect(
+ 								SESSION_MYSQL_G(mysql),
+ 								SESSION_MYSQL_G(host),
+ 								SESSION_MYSQL_G(user),
+@@ -322,15 +335,25 @@
+ 								SESSION_MYSQL_G(db),
+ 								SESSION_MYSQL_G(port),
+ 								SESSION_MYSQL_G(sock),
+-								CLIENT_FOUND_ROWS)) {
+-
+-			return SUCCESS;
+-		}
+-	} else {
+-		if (mysql_ping(SESSION_MYSQL_G(mysql))==0) {
++								CLIENT_FOUND_ROWS);
++#if	MYSQL_VERSION_ID >= 50013 && MYSQL_VERSION_ID < 50019
++		// address bug prior 5.0.19
++		reconnect = 1;
++		mysql_options(SESSION_MYSQL_G(mysql), MYSQL_OPT_RECONNECT, &reconnect);
++#endif
++		if (h) {
+ 			return SUCCESS;
+ 		}
+ 	}
++	
++	if (mysql_ping(SESSION_MYSQL_G(mysql))) {
++		return SUCCESS;
++	}
++
++	// so ping_failed(), we reset mysql handle so it would be attempted to
++	// connect on next request again
++	mysql_close(SESSION_MYSQL_G(mysql));
++	SESSION_MYSQL_G(mysql) = NULL;
+ 	return FAILURE;
+ }
+ 
+@@ -422,7 +445,7 @@
+ 	}
+ 	
+ 	return ret;
+-} 
++}
+ 
+ static int session_mysql_write(const char *key, const char *val, const int vallen TSRMLS_DC) {
+ 	int key_len, query_len, updatequery_len, insertquery_len, unlockquery_len, escapedhost_len, ret=FAILURE;
+@@ -606,14 +629,14 @@
+ PS_OPEN_FUNC(mysql)
+ {
+ 	int ret;
+-	*mod_data = (void *)1; 
++	*mod_data = (void *)1;
+ 
+ 	ret=session_mysql_connect(TSRMLS_C);
+ 	if (SESSION_MYSQL_G(quiet)) {
+ 		return SUCCESS;
+ 	} else {
+ 		return ret;
+-	} 
++	}
+ }
+ /* }}} */
+ 
+@@ -732,7 +755,7 @@
+ {
+ 	int ret, vallen;
+ 	char *val, c;
+-	const char *p;     
++	const char *p;
+ 
+ 
+ 	for (p = key; (c = *p); p++) {
+@@ -758,7 +781,7 @@
+ 
+ 	ret=session_mysql_read(key,&val,&vallen TSRMLS_CC);
+ 
+-	return ret;    
++	return ret;
+ }
+ /* }}} */
+ #endif
+Only in session_mysql-1.9-reconnect/: session_mysql.c~
+Only in session_mysql-1.9-reconnect/: session_mysql.la
+Only in session_mysql-1.9-reconnect/: session_mysql.lo
