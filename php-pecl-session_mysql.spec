@@ -1,13 +1,9 @@
-# on apache2 restart when module can't connect to database issues errors that can't be understand why:
-# [error] [client ::1] PHP Fatal error:  session_start(): Failed to initialize storage module: mysql (path: /var/run/php) in class.auth.php on line 22
-# [error] [client x.x.x.x] PHP Fatal error:  session_start(): Failed to initialize storage module: mysql (path: /var/run/php) in class.auth.php on line 22
-#
 %define		_modname	session_mysql
 Summary:	MySQL session save handler for PHP
 Summary(pl.UTF-8):	Obsługa zapisywania sesji w bazie MySQL dla PHP
 Name:		php-pecl-%{_modname}
 Version:	1.9
-Release:	1.22
+Release:	2
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{_modname}-%{version}.tgz
@@ -15,6 +11,7 @@ Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{_modname}-%{vers
 Source1:	%{name}.ini
 Source2:	%{name}.sql
 Patch0:		%{name}-leak.patch
+Patch1:		%{name}-reconnect.patch
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
 BuildRequires:	mysql-devel
 BuildRequires:	php-devel >= 3:5.0.0
@@ -39,6 +36,7 @@ Obsługa zapisywania sesji w bazie MySQL dla PHP.
 %prep
 %setup -q -n %{_modname}-%{version}
 %patch0 -p1
+%patch1 -p1
 cp -a %{SOURCE2} database.sql
 
 %build
