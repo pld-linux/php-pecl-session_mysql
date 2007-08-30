@@ -1,5 +1,5 @@
---- session_mysql-1.9/session_mysql.c	2007-08-29 19:35:20.209370945 +0300
-+++ session_mysql-1.9-reconnect/session_mysql.c	2007-08-29 19:35:53.222688544 +0300
+--- session_mysql-1.9-reconnect/session_mysql.c	2007-08-29 19:35:53.222688544 +0300
++++ session_mysql-1.9-reconnect/session_mysql.c	2007-08-30 13:29:10.614270156 +0300
 @@ -8,6 +8,15 @@
  
  #include "ext/session/php_session.h"
@@ -73,7 +73,7 @@
  		}
  	}
 +	
-+	if (mysql_ping(SESSION_MYSQL_G(mysql))) {
++	if (mysql_ping(SESSION_MYSQL_G(mysql)) == 0) {
 +		return SUCCESS;
 +	}
 +
