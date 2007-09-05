@@ -3,7 +3,7 @@ Summary:	MySQL session save handler for PHP
 Summary(pl.UTF-8):	Obsługa zapisywania sesji w bazie MySQL dla PHP
 Name:		php-pecl-%{_modname}
 Version:	1.9
-Release:	3
+Release:	4
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{_modname}-%{version}.tgz
@@ -12,6 +12,7 @@ Source1:	%{name}.ini
 Source2:	%{name}.sql
 Patch0:		%{name}-leak.patch
 Patch1:		%{name}-reconnect.patch
+Patch2:		%{name}-segv.patch
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
 BuildRequires:	mysql-devel
 BuildRequires:	php-devel >= 3:5.0.0
@@ -37,12 +38,17 @@ Obsługa zapisywania sesji w bazie MySQL dla PHP.
 %setup -q -n %{_modname}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 cp -a %{SOURCE2} database.sql
 
 %build
-phpize
-%configure \
+[ config.m4 -ot configure ] || rm -f configure
+[ -f configure ] || phpize
+[ configure -ot Makefile ] || rm -f Makefile
+if [ ! -f Makefile ]; then
+	%configure \
 	--with-mysql=/usr
+fi
 %{__make}
 
 %install
