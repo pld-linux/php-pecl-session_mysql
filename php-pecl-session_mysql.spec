@@ -1,12 +1,12 @@
-%define		_modname	session_mysql
+%define		modname	session_mysql
 Summary:	MySQL session save handler for PHP
 Summary(pl.UTF-8):	Obsługa zapisywania sesji w bazie MySQL dla PHP
-Name:		php-pecl-%{_modname}
+Name:		php-pecl-%{modname}
 Version:	1.10
 Release:	7
 License:	MIT
 Group:		Development/Languages/PHP
-Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{_modname}-%{version}.tgz
+Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{modname}-%{version}.tgz
 # Source0-md5:	66e933c506577ad43a0effbd2bbad715
 Source1:	%{name}.ini
 Source2:	%{name}.sql
@@ -27,8 +27,8 @@ MySQL session save handler for PHP.
 Obsługa zapisywania sesji w bazie MySQL dla PHP.
 
 %prep
-%setup -q -n %{_modname}-%{version}
-cp -a %{SOURCE2} database.sql
+%setup -q -n %{modname}-%{version}
+cp -p %{SOURCE2} database.sql
 
 %build
 [ config.m4 -ot configure ] || rm -f configure
@@ -44,8 +44,8 @@ fi
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{php_sysconfdir}/conf.d,%{php_extensiondir}}
 
-install -p modules/%{_modname}.so $RPM_BUILD_ROOT%{php_extensiondir}
-cp -a %{SOURCE1} $RPM_BUILD_ROOT%{php_sysconfdir}/conf.d/%{_modname}.ini
+install -p modules/%{modname}.so $RPM_BUILD_ROOT%{php_extensiondir}
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{php_sysconfdir}/conf.d/%{modname}.ini
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -61,5 +61,5 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc LICENCE README database.sql
-%config(noreplace) %verify(not md5 mtime size) %{php_sysconfdir}/conf.d/%{_modname}.ini
-%attr(755,root,root) %{php_extensiondir}/%{_modname}.so
+%config(noreplace) %verify(not md5 mtime size) %{php_sysconfdir}/conf.d/%{modname}.ini
+%attr(755,root,root) %{php_extensiondir}/%{modname}.so
