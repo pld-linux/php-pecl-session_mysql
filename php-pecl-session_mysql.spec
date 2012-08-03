@@ -3,7 +3,7 @@ Summary:	MySQL session save handler for PHP
 Summary(pl.UTF-8):	Obsługa zapisywania sesji w bazie MySQL dla PHP
 Name:		php-pecl-%{modname}
 Version:	1.10
-Release:	7
+Release:	8
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{modname}-%{version}.tgz
