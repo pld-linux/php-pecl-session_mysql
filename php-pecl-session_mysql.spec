@@ -1,22 +1,23 @@
+%define		php_name	php%{?php_suffix}
 %define		modname	session_mysql
 Summary:	MySQL session save handler for PHP
 Summary(pl.UTF-8):	Obsługa zapisywania sesji w bazie MySQL dla PHP
-Name:		php-pecl-%{modname}
+Name:		%{php_name}-pecl-%{modname}
 Version:	1.10
 Release:	9
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{modname}-%{version}.tgz
 # Source0-md5:	66e933c506577ad43a0effbd2bbad715
-Source1:	%{name}.ini
-Source2:	%{name}.sql
+Source1:	php-pecl-%{modname}.ini
+Source2:	php-pecl-%{modname}.sql
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
+BuildRequires:	%{php_name}-devel >= 3:5.0.0
 BuildRequires:	mysql-devel
-BuildRequires:	php-devel >= 3:5.0.0
-BuildRequires:	rpmbuild(macros) >= 1.344
+BuildRequires:	rpmbuild(macros) >= 1.650
 %{?requires_php_extension}
+Requires:	%{php_name}-session
 Requires:	php(core) >= 5.0.4
-Requires:	php-session
 Provides:	php(session_mysql)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
