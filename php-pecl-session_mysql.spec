@@ -12,12 +12,11 @@ Source0:	http://websupport.sk/~stanojr/projects/session_mysql/%{modname}-%{versi
 Source1:	php-pecl-%{modname}.ini
 Source2:	php-pecl-%{modname}.sql
 URL:		http://websupport.sk/~stanojr/projects/session_mysql/
-BuildRequires:	%{php_name}-devel >= 3:5.0.0
+BuildRequires:	%{php_name}-devel >= 3:5.0.4
 BuildRequires:	mysql-devel
 BuildRequires:	rpmbuild(macros) >= 1.650
 %{?requires_php_extension}
 Requires:	%{php_name}-session
-Requires:	php(core) >= 5.0.4
 Provides:	php(session_mysql)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
